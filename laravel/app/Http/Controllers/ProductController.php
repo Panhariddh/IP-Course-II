@@ -60,16 +60,21 @@ class ProductController extends Controller
      * Display the specified resource.
      */
     public function updateProduct(Request $request, $productId)
-    {
-        $product = Product::find($productId);
+{
+    $product = Product::find($productId);
 
-        $product = $product->update($request->all());
-
-        return response()->json([
-            'message' => 'Product updated successfully',
-            'product' => $product
-        ]);
+    if (!$product) {
+        return response()->json(['message' => 'Product not found'], 404);
     }
+
+    $product->update($request->all());
+    $product->refresh();
+
+    return response()->json([
+        'message' => 'Product updated successfully',
+        'product' => $product
+    ]);
+}
 
     public function deleteProduct( $productId)
     {
