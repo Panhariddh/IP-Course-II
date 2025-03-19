@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->bigInteger('category_id')->unsigned();
-            $table->double('pricing');
-            $table->text('description')->nullable();
-            $table->jsonb('images')->nullable();
+            $table->unsignedBigInteger('customer_id');
+            $table->timestamp('order_date')->nullable();
+            $table->decimal('total_price', 10, 2);
             $table->softDeletes();
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->timestamps();
-
-            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('orders');
     }
 };

@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('wishlists', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->bigInteger('category_id')->unsigned();
-            $table->double('pricing');
-            $table->text('description')->nullable();
-            $table->jsonb('images')->nullable();
+            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('customer_id');
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('category_id')->references('id')->on('categories');
+            // Foreign Key Constraints
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('wishlist');
     }
 };
