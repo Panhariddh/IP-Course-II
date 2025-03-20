@@ -2,33 +2,35 @@
 
 namespace App\Observers;
 
-use App\Models\Order;
+use App\Models\ActivityLog;
+use Illuminate\Database\Eloquent\Model;
 
 class ModelActivityObserver
 {
+    
     /**
      * Handle the Order "created" event.
      */
-    public function created(Order $order): void
+    public function created(Model $model): void
     {
         ActivityLog::create([
-            'model'    => get_class($model),
+            'model' => get_class($model),
             'model_id' => $model->id,
-            'action'   => 'created',
-            'changes'  => json_encode($model->toArray()),
+            'action' => 'created',
+            'changes' => json_encode($model->toArray()),
         ]);
     }
 
-    /**
+    /** 
      * Handle the Order "updated" event.
      */
-    public function updated(Order $order): void
+    public function updated(Model $model): void
     {
         ActivityLog::create([
-            'model'    => get_class($model),
+            'model' => get_class($model),
             'model_id' => $model->id,
-            'action'   => 'updated',
-            'changes'  => json_encode([
+            'action' => 'updated',
+            'changes' => json_encode([
                 'old' => $model->getOriginal(),
                 'new' => $model->getChanges(),
             ]),
@@ -38,14 +40,13 @@ class ModelActivityObserver
     /**
      * Handle the Order "deleted" event.
      */
-    public function deleted(Order $order): void
+    public function deleted(Model $model): void
     {
         ActivityLog::create([
-            'model'    => get_class($model),
+            'model' => get_class($model),
             'model_id' => $model->id,
-            'action'   => 'deleted',
-            'changes'  => json_encode($model->toArray()),
+            'action' => 'deleted',
+            'changes' => json_encode($model->toArray()),
         ]);
     }
-
 }
