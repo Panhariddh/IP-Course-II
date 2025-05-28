@@ -4,11 +4,12 @@ import { UserModule } from '../user/user.module';
 import { Task } from './entity/task.entity';
 import { TasksController } from './task.controller';
 import { TaskService } from './task.service';
+import { UserService } from '../user/user.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Task]), UserModule],
   controllers: [TasksController],
-  providers: [TaskService],
+  providers: [TaskService, UserService],
   exports: [],
   // Add any other necessary configurations or modules
 })
