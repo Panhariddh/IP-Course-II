@@ -42,4 +42,9 @@ export class TasksController {
   remove(@Param('id') id: string) {
     return this.taskService.remove(+id);
   }
+
+  @Delete()
+  clearAll() {
+    return this.taskService.clearAll();
+  }
 }
