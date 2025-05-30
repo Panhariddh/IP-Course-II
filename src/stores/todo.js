@@ -61,9 +61,7 @@ export const useTodoStore = defineStore("todo", {
       const newTodo = {
         name,
         description: "description", // update as needed
-        createdAt: new Date().toISOString(),
-        completedAt: null,
-        user: { id: 1 }, // assuming user ID 1 for now
+        userId: 1,  // assuming user ID 1 for now
       };
 
       try {
@@ -84,17 +82,31 @@ export const useTodoStore = defineStore("todo", {
 
     async clearAll() {
       try {
-        await Promise.all(
-          this.todos.map((todo) =>
-            fetch(`http://localhost:3100/tasks/${todo.id}`, {
-              method: "DELETE",
-            })
-          )
+        // First delete all todos from the server
+        const deletePromises = this.todos.map(todo => 
+          fetch(`http://localhost:3100/tasks/${todo.id}`, {
+            method: "DELETE",
+          })
         );
+        
+        await Promise.all(deletePromises);
+        
+        // Only clear the local state if all deletions were successful
         this.todos = [];
+        
+        // Optional: refetch todos to ensure sync (though we just cleared them)
+        // await this.fetchTodos();
+        
+        return true; // Indicate success
       } catch (error) {
         console.error("Failed to clear todos:", error);
+        
+        // Optional: refetch todos to restore state if something went wrong
+        // await this.fetchTodos();
+        
+        return false; // Indicate failure
       }
-    },
+    }
+
   },
 });

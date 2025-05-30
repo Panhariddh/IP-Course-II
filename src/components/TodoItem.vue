@@ -7,7 +7,7 @@
         @click.stop
       />
       <span class="task">{{ todo.name }}</span>
-      <i class="uil" :class="icon"></i>
+      <!-- <i class="uil" :class="icon"></i> -->
     </div>
     <button class="delete-btn" @click.stop="deleteTodo(todo.id)">
       <i class="uil uil-trash-alt"></i>
